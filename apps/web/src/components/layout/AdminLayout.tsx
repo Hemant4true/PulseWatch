@@ -1,6 +1,6 @@
 import { Outlet, Navigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-import { Activity, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export const AdminLayout = () => {
   const { user, isLoading } = useAuthStore();
