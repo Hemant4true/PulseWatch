@@ -32,17 +32,19 @@ export function TopNavbar({ workspaceName = 'Loading...' }: { workspaceName?: st
             <span>{user?.name}</span>
           </button>
           
-          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-brand-accent/20 rounded-md shadow-lg py-1 hidden group-hover:block z-50">
-            <div className="px-4 py-2 border-b border-brand-accent/20">
-              <p className="text-sm font-medium text-brand-base">{user?.name}</p>
-              <p className="text-xs text-brand-surface truncate">{user?.email}</p>
+          <div className="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
+            <div className="w-48 bg-white border border-brand-accent/20 rounded-md shadow-lg py-1">
+              <div className="px-4 py-2 border-b border-brand-accent/20">
+                <p className="text-sm font-medium text-brand-base">{user?.name}</p>
+                <p className="text-xs text-brand-surface truncate">{user?.email}</p>
+              </div>
+              <button 
+                onClick={() => logout()}
+                className="w-full text-left px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+              >
+                Sign out
+              </button>
             </div>
-            <button 
-              onClick={() => logout()}
-              className="w-full text-left px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
-            >
-              Sign out
-            </button>
           </div>
         </div>
       </div>

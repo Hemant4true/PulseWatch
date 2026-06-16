@@ -9,8 +9,8 @@
     --brand-accent: #81689D;
     --brand-highlight: #FFD0EC;
 
-    --background: 0 0% 100%;
-    --foreground: 228 26% 38%; /* #474F7A (brand surface) for body text */
+    --background: 40 33% 96%; /* #FAF7F2 warm background */
+    --foreground: 244 65% 41%; /* #2C24AC text */
 
     --card: 240 100% 98.8%; /* #F8F7FF */
     --card-foreground: 228 26% 38%;
@@ -46,7 +46,7 @@
     @apply border-border;
   }
   h1, h2, h3, h4, h5, h6 {
-    color: var(--brand-base);
+    color: #2C24AC;
   }
   html {
     color-scheme: light only;
