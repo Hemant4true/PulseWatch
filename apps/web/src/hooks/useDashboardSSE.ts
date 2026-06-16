@@ -6,7 +6,7 @@ type SSEEventHandler = (type: string, payload: any) => void;
 
 export function useDashboardSSE(workspaceId: string | undefined, onEvent: SSEEventHandler) {
   const eventSourceRef = useRef<EventSource | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const reconnectAttemptRef = useRef(0);
   const { accessToken } = useAuthStore();
 

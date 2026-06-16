@@ -23,7 +23,7 @@ export default function Register() {
       const response = await api.post('/auth/register', { name, email, password });
       const { user, accessToken } = response.data.data;
       login(user, accessToken);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to register');
     } finally {
@@ -34,6 +34,11 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-lg p-8">
+        <div className="flex justify-center mb-6">
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src="/logo.svg" alt="PulseWatch Logo" className="w-12 h-auto" />
+          </div>
+        </div>
         <h2 className="text-2xl font-semibold text-center text-foreground mb-2">Create an account</h2>
         <p className="text-muted-foreground text-center mb-6 text-sm">Start monitoring your services in seconds</p>
 

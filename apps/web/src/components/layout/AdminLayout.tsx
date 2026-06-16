@@ -22,8 +22,8 @@ export const AdminLayout = () => {
     <div className="min-h-screen bg-background flex flex-col font-sans text-foreground">
       <header className="h-16 border-b border-border bg-card flex items-center px-6 sticky top-0 z-30">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center shadow-sm">
-            <Activity className="text-white w-5 h-5" />
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src="/logo.svg" alt="PulseWatch Admin Logo" className="w-8 h-auto" />
           </div>
           <span className="font-bold text-lg tracking-tight text-foreground">PulseWatch <span className="text-red-500">Admin</span></span>
         </div>

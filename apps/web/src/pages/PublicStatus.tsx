@@ -86,11 +86,34 @@ export default function PublicStatus() {
   }
 
   if (!data) {
+    if (slug === 'demo') {
+      // Fallback demo data
+      const demoData: StatusData = {
+        page: { title: 'PulseWatch Status', slug: 'demo' },
+        overallStatus: 'operational',
+        services: [
+          { id: '1', name: 'API Server (US East)', type: 'API', url: 'api.pulsewatch.com', status: 'UP', uptime30d: 99.99, responseTime: 45 },
+          { id: '2', name: 'Authentication Service', type: 'Auth', url: 'auth.pulsewatch.com', status: 'UP', uptime30d: 99.95, responseTime: 120 },
+          { id: '3', name: 'Web Dashboard', type: 'Website', url: 'app.pulsewatch.com', status: 'UP', uptime30d: 99.9, responseTime: 80 }
+        ],
+        incidents: [
+          { id: 'i1', title: 'API Latency Spike', status: 'RESOLVED', startedAt: new Date(Date.now() - 86400000 * 2).toISOString(), monitor: { name: 'API Server (US East)' } }
+        ],
+        uptimeHistory: {
+          '1': Array.from({length: 90}).map((_, i) => ({ date: new Date(Date.now() - (89-i)*86400000).toISOString().split('T')[0], uptime: i === 88 ? 98.5 : 100 })),
+          '2': Array.from({length: 90}).map((_, i) => ({ date: new Date(Date.now() - (89-i)*86400000).toISOString().split('T')[0], uptime: 100 })),
+          '3': Array.from({length: 90}).map((_, i) => ({ date: new Date(Date.now() - (89-i)*86400000).toISOString().split('T')[0], uptime: i === 45 ? 90.0 : 100 }))
+        }
+      };
+      setData(demoData);
+      return null; // Will re-render with data
+    }
+
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
-        <AlertTriangle className="w-16 h-16 text-muted-foreground mb-4 opacity-50" />
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4 text-slate-900">
+        <AlertTriangle className="w-16 h-16 text-slate-400 mb-4 opacity-50" />
         <h1 className="text-2xl font-bold">Status Page Not Found</h1>
-        <p className="text-muted-foreground mt-2">This status page does not exist or is private.</p>
+        <p className="text-slate-500 mt-2">This status page does not exist or is private.</p>
       </div>
     );
   }
@@ -101,7 +124,7 @@ export default function PublicStatus() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-in fade-in duration-500">
       
       <div className="mb-10 text-center sm:text-left">
-        <h1 className="text-3xl font-bold text-foreground">{data.page.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{data.page.title}</h1>
       </div>
 
       {/* Status Banner */}
@@ -114,18 +137,18 @@ export default function PublicStatus() {
       </div>
 
       {/* Services Table */}
-      <div className="bg-card border border-border rounded-xl shadow-sm mb-12 overflow-hidden">
-        <div className="p-5 border-b border-border bg-muted/30">
-          <h3 className="text-lg font-semibold text-foreground">Services</h3>
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm mb-12 overflow-hidden">
+        <div className="p-5 border-b border-slate-200 bg-slate-50">
+          <h3 className="text-lg font-semibold text-slate-900">Services</h3>
         </div>
-        <div className="divide-y divide-border">
+        <div className="divide-y divide-slate-100">
           {data.services.map(service => (
             <div key={service.id} className="p-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
-                  <h4 className="text-lg font-medium text-foreground">{service.name}</h4>
-                  <div className="flex items-center space-x-3 text-sm text-muted-foreground mt-1">
-                    <span className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded text-xs">{service.type}</span>
+                  <h4 className="text-lg font-medium text-slate-900">{service.name}</h4>
+                  <div className="flex items-center space-x-3 text-sm text-slate-500 mt-1">
+                    <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">{service.type}</span>
                     <span className="flex items-center"><Activity className="w-3.5 h-3.5 mr-1" /> {service.uptime30d}% uptime</span>
                     <span className="flex items-center"><Clock className="w-3.5 h-3.5 mr-1" /> {service.responseTime}ms avg</span>
                   </div>
@@ -145,14 +168,14 @@ export default function PublicStatus() {
 
               {/* 90 Day Graph */}
               <div className="mt-4">
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+                <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
                   <span>90 days ago</span>
-                  <span className="font-medium text-foreground">{service.uptime30d}%</span>
+                  <span className="font-medium text-slate-700">{service.uptime30d}%</span>
                   <span>Today</span>
                 </div>
                 <div className="flex gap-[2px] h-8 items-end">
                   {data.uptimeHistory[service.id]?.map((day, idx) => {
-                    let color = "bg-muted"; // No data
+                    let color = "bg-slate-200"; // No data
                     if (day.uptime >= 99) color = "bg-green-500";
                     else if (day.uptime >= 90) color = "bg-yellow-500";
                     else if (day.uptime >= 0) color = "bg-red-500";
@@ -175,15 +198,15 @@ export default function PublicStatus() {
 
       {/* Incidents */}
       {data.incidents.length > 0 && (
-        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-border bg-muted/30">
-            <h3 className="text-lg font-semibold text-foreground">Recent Incidents</h3>
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="p-5 border-b border-slate-200 bg-slate-50">
+            <h3 className="text-lg font-semibold text-slate-900">Recent Incidents</h3>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-slate-100">
             {data.incidents.map(incident => (
               <div key={incident.id} className="p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                  <h4 className="text-lg font-medium text-foreground">{incident.title}</h4>
+                  <h4 className="text-lg font-medium text-slate-900">{incident.title}</h4>
                   <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold uppercase border
                     ${incident.status === 'RESOLVED' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 
                       incident.status === 'INVESTIGATING' ? 'bg-red-500/10 text-red-500 border-red-500/20' : 
@@ -192,10 +215,10 @@ export default function PublicStatus() {
                     {incident.status}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mb-1">
-                  Affecting: <span className="font-medium text-foreground">{incident.monitor?.name || 'Multiple Services'}</span>
+                <p className="text-sm text-slate-500 mb-1">
+                  Affecting: <span className="font-medium text-slate-900">{incident.monitor?.name || 'Multiple Services'}</span>
                 </p>
-                <time className="text-xs text-muted-foreground">
+                <time className="text-xs text-slate-400">
                   {new Date(incident.startedAt).toLocaleString()}
                 </time>
               </div>

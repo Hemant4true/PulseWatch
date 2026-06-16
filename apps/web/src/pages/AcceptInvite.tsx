@@ -37,7 +37,7 @@ export default function AcceptInvite() {
         setStatus('success');
         setMessage(res.data.message);
         setTimeout(() => {
-          navigate('/');
+          navigate('/dashboard');
         }, 3000);
       }
     } catch (err: any) {
@@ -124,7 +124,7 @@ export default function AcceptInvite() {
         {status === 'error' && (
           <div className="mt-8">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/dashboard')}
               className="w-full py-2.5 px-4 bg-background border border-border text-foreground font-medium rounded-md hover:bg-muted transition-colors"
             >
               Return to Home

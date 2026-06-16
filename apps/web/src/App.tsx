@@ -8,6 +8,7 @@ import { DashboardLayout } from './components/layout/DashboardLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 import Monitors from './pages/Monitors';
 import MonitorDetail from './pages/MonitorDetail';
 import Incidents from './pages/Incidents';
@@ -53,7 +54,7 @@ function App() {
             {/* Auth required */}
             <Route element={<ProtectedRoute />}>
               <Route element={<DashboardLayout />}>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/monitors" element={<Monitors />} />
                 <Route path="/monitors/:id" element={<MonitorDetail />} />
                 <Route path="/analytics" element={<Analytics />} />
@@ -63,7 +64,9 @@ function App() {
               </Route>
             </Route>
 
-            {/* Public Status Page (No Auth) */}
+            {/* Public Pages */}
+            <Route path="/" element={<Landing />} />
+            
             <Route element={<PublicLayout />}>
               <Route path="/status/:slug" element={<PublicStatus />} />
             </Route>

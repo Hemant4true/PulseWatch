@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Play, Save, CheckCircle, XCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '../lib/api';
 
 interface MonitorModalProps {
@@ -40,12 +41,18 @@ export function MonitorModal({ isOpen, onClose, onSaved }: MonitorModalProps) {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    let finalUrl = url.trim();
+    if (type !== 'SSL' && !finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+      finalUrl = 'https://' + finalUrl;
+    }
     try {
-      await api.post('/monitors', { name, url, type, method, interval: Number(interval) });
+      await api.post('/monitors', { name, url: finalUrl, type, method, interval: Number(interval) });
       onSaved();
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      const msg = error.response?.data?.message || 'Failed to save monitor';
+      toast.error(msg);
     } finally {
       setIsSaving(false);
     }

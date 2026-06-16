@@ -58,21 +58,45 @@ export default function Analytics() {
     return activeData.chartData.slice(-Math.max(days, 1));
   }, [activeData, timeRange]);
 
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     if (!selectedMonitorId) return;
     const from = new Date();
     if (timeRange === '24h') from.setDate(from.getDate() - 1);
     else if (timeRange === '7d') from.setDate(from.getDate() - 7);
     else from.setDate(from.getDate() - 30);
 
-    const url = `${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/analytics/export/csv?monitorId=${selectedMonitorId}&from=${from.toISOString()}`;
-    window.open(url, '_blank');
+    try {
+      const response = await api.get(`/analytics/export/csv?monitorId=${selectedMonitorId}&from=${from.toISOString()}`, {
+        responseType: 'blob'
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `analytics_${selectedMonitorId}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+    } catch (e) {
+      console.error('Export failed', e);
+    }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!selectedMonitorId) return;
-    const url = `${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/analytics/export/pdf?monitorId=${selectedMonitorId}`;
-    window.open(url, '_blank');
+    try {
+      const response = await api.get(`/analytics/export/pdf?monitorId=${selectedMonitorId}`, {
+        responseType: 'blob'
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `analytics_${selectedMonitorId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+    } catch (e) {
+      console.error('Export failed', e);
+    }
   };
 
   if (isLoading) {
