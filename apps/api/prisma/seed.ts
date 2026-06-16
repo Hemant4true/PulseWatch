@@ -1,7 +1,19 @@
 // Run: npx tsx prisma/seed.ts
 import { PrismaClient, MonitorType, MonitorStatus, IncidentStatus, WorkspaceRole, UserRole, HttpMethod } from '@prisma/client';
 
-const prisma = new PrismaClient();
+let databaseUrl = process.env.DATABASE_URL || '';
+if (databaseUrl.includes('6543') && !databaseUrl.includes('pgbouncer=true')) {
+  const separator = databaseUrl.includes('?') ? '&' : '?';
+  databaseUrl += `${separator}pgbouncer=true&connection_limit=1`;
+}
+
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: databaseUrl
+    }
+  }
+});
 
 async function main() {
   console.log('Cleaning up existing database...');
