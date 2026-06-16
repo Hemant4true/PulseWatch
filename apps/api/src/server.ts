@@ -71,9 +71,14 @@ app.listen(port, () => {
 });
 
 if (process.env.RUN_SEED === 'true') {
-  import('./../../prisma/seed.js').then(({ main }) => {
-    main()
-      .then(() => console.log('[SEED] Database seeded successfully'))
-      .catch((e) => console.error('[SEED] Seed failed:', e))
-  })
+  const { exec } = require('child_process');
+  console.log('[SEED] Running database seed...');
+  exec('npx tsx prisma/seed.ts', (error: any, stdout: any, stderr: any) => {
+    if (error) {
+      console.error('[SEED] Seed failed:', error.message);
+      return;
+    }
+    if (stderr) console.error('[SEED]', stderr);
+    console.log('[SEED] Database seeded successfully\n', stdout);
+  });
 }
