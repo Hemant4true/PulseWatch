@@ -1,8 +1,16 @@
 import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
 
+const getBaseUrl = () => {
+  const url = import.meta.env.VITE_API_URL;
+  if (!url) return 'http://localhost:4000/api';
+  // Remove trailing slash if present
+  const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
+  baseURL: getBaseUrl(),
   withCredentials: true, // required to send and receive httpOnly cookies
 });
 
