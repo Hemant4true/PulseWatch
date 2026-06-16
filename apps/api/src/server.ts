@@ -69,3 +69,11 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
   startCronJobs();
 });
+
+if (process.env.RUN_SEED === 'true') {
+  import('./../../prisma/seed.js').then(({ main }) => {
+    main()
+      .then(() => console.log('[SEED] Database seeded successfully'))
+      .catch((e) => console.error('[SEED] Seed failed:', e))
+  })
+}
