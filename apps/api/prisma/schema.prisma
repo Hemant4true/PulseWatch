@@ -1,0 +1,231 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  SUPERADMIN
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum MonitorType {
+  WEBSITE
+  API
+  SSL
+}
+
+enum MonitorStatus {
+  UP
+  DOWN
+  DEGRADED
+  UNKNOWN
+}
+
+enum IncidentStatus {
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+}
+
+enum AlertChannel {
+  EMAIL
+}
+
+enum HttpMethod {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+}
+
+model User {
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  passwordHash     String
+  avatarUrl        String?
+  role             UserRole          @default(USER)
+  isSuspended      Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  workspacesOwned  Workspace[]       @relation("WorkspaceOwner")
+  workspaceMembers WorkspaceMember[]
+  activityLogs     ActivityLog[]
+  alertPreferences AlertPreference[]
+  invitesSent      WorkspaceInvite[] @relation("InvitesSent")
+}
+
+model Workspace {
+  id               String            @id @default(uuid())
+  name             String
+  slug             String            @unique
+  ownerId          String
+  owner            User              @relation("WorkspaceOwner", fields: [ownerId], references: [id])
+  plan             String            @default("FREE")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  members          WorkspaceMember[]
+  monitors         Monitor[]
+  alerts           Alert[]
+  alertPreferences AlertPreference[]
+  statusPages      StatusPage[]
+  activityLogs     ActivityLog[]
+  invites          WorkspaceInvite[]
+
+  @@index([ownerId])
+}
+
+model WorkspaceMember {
+  id          String        @id @default(uuid())
+  workspaceId String
+  userId      String
+  role        WorkspaceRole @default(MEMBER)
+  joinedAt    DateTime      @default(now())
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+}
+
+model WorkspaceInvite {
+  id          String        @id @default(uuid())
+  workspaceId String
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  email       String
+  tokenHash   String        @unique
+  role        WorkspaceRole @default(MEMBER)
+  inviterId   String
+  inviter     User          @relation("InvitesSent", fields: [inviterId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  createdAt   DateTime      @default(now())
+
+  @@unique([workspaceId, email])
+  @@index([tokenHash])
+}
+
+model Monitor {
+  id          String      @id @default(uuid())
+  workspaceId String
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  type        MonitorType
+  url         String
+  interval    Int         @default(5) // in minutes
+  method      HttpMethod  @default(GET)
+  headers     Json?
+  body        String?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  checks    MonitorCheck[]
+  incidents Incident[]
+  alerts    Alert[]
+  sslChecks SSLCheck[]
+
+  @@index([workspaceId])
+}
+
+model MonitorCheck {
+  id           String        @id @default(uuid())
+  monitorId    String
+  monitor      Monitor       @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  status       MonitorStatus
+  responseTime Int? // in milliseconds
+  statusCode   Int?
+  error        String?
+  checkedAt    DateTime      @default(now())
+
+  @@index([monitorId, checkedAt(sort: Desc), status])
+}
+
+model Incident {
+  id         String         @id @default(uuid())
+  monitorId  String
+  monitor    Monitor        @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  status     IncidentStatus @default(INVESTIGATING)
+  title      String
+  updates    Json // array of { timestamp, message, status }
+  startedAt  DateTime       @default(now())
+  resolvedAt DateTime?
+
+  @@index([monitorId, status])
+}
+
+model Alert {
+  id          String       @id @default(uuid())
+  workspaceId String
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  monitorId   String
+  monitor     Monitor      @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  type        String // e.g., "DOWN", "UP", "SSL_EXPIRING"
+  channel     AlertChannel @default(EMAIL)
+  payload     Json?
+  sentAt      DateTime     @default(now())
+
+  @@index([workspaceId, sentAt(sort: Desc)])
+}
+
+model AlertPreference {
+  id           String    @id @default(uuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailEnabled Boolean   @default(true)
+  notifyOn     String[] // e.g., ["DOWN", "UP", "DEGRADED"]
+
+  @@unique([workspaceId, userId])
+}
+
+model SSLCheck {
+  id            String    @id @default(uuid())
+  monitorId     String
+  monitor       Monitor   @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  isValid       Boolean
+  expiresAt     DateTime?
+  daysRemaining Int?
+  checkedAt     DateTime  @default(now())
+
+  @@index([monitorId, checkedAt])
+}
+
+model StatusPage {
+  id           String    @id @default(uuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  slug         String    @unique
+  title        String
+  isPublic     Boolean   @default(true)
+  customDomain String?   @unique
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([workspaceId])
+}
+
+model ActivityLog {
+  id          String    @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action      String
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId, createdAt(sort: Desc)])
+}
