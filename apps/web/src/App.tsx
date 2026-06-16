@@ -23,7 +23,7 @@ import { AdminLayout } from './components/layout/AdminLayout';
 
 import { Toaster } from 'sonner';
 
-import { ThemeProvider } from './components/ThemeProvider';
+
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
@@ -42,45 +42,43 @@ function App() {
   }
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="pulsewatch-theme">
-      <ErrorBoundary>
-        <BrowserRouter>
-          <Toaster position="top-right" richColors />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/accept-invite" element={<AcceptInvite />} />
-            
-            {/* Auth required */}
-            <Route element={<ProtectedRoute />}>
-              <Route element={<DashboardLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/monitors" element={<Monitors />} />
-                <Route path="/monitors/:id" element={<MonitorDetail />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/incidents" element={<Incidents />} />
-                <Route path="/incidents/:id" element={<IncidentDetail />} />
-                <Route path="/settings" element={<Settings />} />
-              </Route>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Toaster position="top-right" richColors />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/accept-invite" element={<AcceptInvite />} />
+          
+          {/* Auth required */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/monitors" element={<Monitors />} />
+              <Route path="/monitors/:id" element={<MonitorDetail />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/incidents" element={<Incidents />} />
+              <Route path="/incidents/:id" element={<IncidentDetail />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
+          </Route>
 
-            {/* Public Pages */}
-            <Route path="/" element={<Landing />} />
-            
-            <Route element={<PublicLayout />}>
-              <Route path="/status/:slug" element={<PublicStatus />} />
-            </Route>
+          {/* Public Pages */}
+          <Route path="/" element={<Landing />} />
+          
+          <Route element={<PublicLayout />}>
+            <Route path="/status/:slug" element={<PublicStatus />} />
+          </Route>
 
-            {/* Superadmin Panel */}
-            <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<Admin />} />
-            </Route>
+          {/* Superadmin Panel */}
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </ErrorBoundary>
-    </ThemeProvider>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

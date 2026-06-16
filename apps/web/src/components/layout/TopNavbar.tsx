@@ -1,10 +1,8 @@
-import { Bell, ChevronDown, User, Moon, Sun } from 'lucide-react';
+import { Bell, ChevronDown, User } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
-import { useTheme } from '../ThemeProvider';
 
 export function TopNavbar({ workspaceName = 'Loading...' }: { workspaceName?: string }) {
   const { user, logout } = useAuthStore();
-  const { theme, setTheme } = useTheme();
 
   return (
     <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shrink-0">
@@ -19,13 +17,6 @@ export function TopNavbar({ workspaceName = 'Loading...' }: { workspaceName?: st
       </div>
 
       <div className="flex items-center space-x-4">
-        <button 
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
-
         <button className="text-muted-foreground hover:text-foreground transition-colors relative">
           <Bell className="w-5 h-5" />
           <span className="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full"></span>
