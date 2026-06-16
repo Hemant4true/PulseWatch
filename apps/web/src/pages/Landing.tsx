@@ -92,7 +92,7 @@ export default function Landing() {
 
               {/* Fake Terminal Mockup */}
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl blur opacity-20"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-brand-highlight to-purple-600 rounded-xl blur opacity-20"></div>
                 <div className="relative bg-background/50 border border-brand-white/20 rounded-xl overflow-hidden shadow-2xl">
                   <div className="flex items-center px-4 py-3 border-b border-brand-white/20 bg-background/50/50">
                     <div className="flex space-x-2">
@@ -282,7 +282,7 @@ export default function Landing() {
         {/* 7. Metrics Bar */}
         <section className="bg-background py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-indigo-500/50">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-brand-highlight/50">
               <div className="text-center px-4">
                 <div className="text-4xl md:text-5xl font-black text-white mb-2">99.9%</div>
                 <div className="text-foreground/80 font-medium">Uptime tracked</div>

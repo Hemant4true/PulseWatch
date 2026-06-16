@@ -4,45 +4,52 @@
 
 @layer base {
   :root {
+    --brand-base: #1F2544;
+    --brand-surface: #474F7A;
+    --brand-accent: #81689D;
+    --brand-highlight: #FFD0EC;
+
     --background: 0 0% 100%;
-    --foreground: 244 47% 20%;
+    --foreground: 228 26% 38%; /* #474F7A (brand surface) for body text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 244 47% 20%;
+    --card: 240 100% 98.8%; /* #F8F7FF */
+    --card-foreground: 228 26% 38%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 244 47% 20%;
+    --popover: 240 100% 98.8%;
+    --popover-foreground: 228 26% 38%;
 
-    --primary: 236 49% 35%;
-    --primary-foreground: 180 100% 99.8%;
+    --primary: 228 37% 19%; /* #1F2544 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 317 100% 90%; /* #FFD0EC */
+    --secondary-foreground: 228 37% 19%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 268 25% 51%; /* #81689D */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 236 49% 35%;
+    --border: 268 25% 51%; /* #81689D */
+    --input: 268 25% 51%;
+    --ring: 317 100% 90%; /* #FFD0EC */
 
     --radius: 0.5rem;
   }
-
-
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--brand-base);
+  }
   html {
+    color-scheme: light only;
     scroll-behavior: smooth;
   }
   body {

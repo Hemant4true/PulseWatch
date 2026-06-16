@@ -110,7 +110,7 @@ export default function PublicStatus() {
     }
 
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4 text-slate-900">
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4 text-brand-base">
         <AlertTriangle className="w-16 h-16 text-slate-400 mb-4 opacity-50" />
         <h1 className="text-2xl font-bold">Status Page Not Found</h1>
         <p className="text-slate-500 mt-2">This status page does not exist or is private.</p>
@@ -124,7 +124,7 @@ export default function PublicStatus() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-in fade-in duration-500">
       
       <div className="mb-10 text-center sm:text-left">
-        <h1 className="text-3xl font-bold text-slate-900">{data.page.title}</h1>
+        <h1 className="text-3xl font-bold text-brand-base">{data.page.title}</h1>
       </div>
 
       {/* Status Banner */}
@@ -139,14 +139,14 @@ export default function PublicStatus() {
       {/* Services Table */}
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm mb-12 overflow-hidden">
         <div className="p-5 border-b border-slate-200 bg-slate-50">
-          <h3 className="text-lg font-semibold text-slate-900">Services</h3>
+          <h3 className="text-lg font-semibold text-brand-base">Services</h3>
         </div>
         <div className="divide-y divide-slate-100">
           {data.services.map(service => (
             <div key={service.id} className="p-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
-                  <h4 className="text-lg font-medium text-slate-900">{service.name}</h4>
+                  <h4 className="text-lg font-medium text-brand-base">{service.name}</h4>
                   <div className="flex items-center space-x-3 text-sm text-slate-500 mt-1">
                     <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">{service.type}</span>
                     <span className="flex items-center"><Activity className="w-3.5 h-3.5 mr-1" /> {service.uptime30d}% uptime</span>
@@ -200,13 +200,13 @@ export default function PublicStatus() {
       {data.incidents.length > 0 && (
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div className="p-5 border-b border-slate-200 bg-slate-50">
-            <h3 className="text-lg font-semibold text-slate-900">Recent Incidents</h3>
+            <h3 className="text-lg font-semibold text-brand-base">Recent Incidents</h3>
           </div>
           <div className="divide-y divide-slate-100">
             {data.incidents.map(incident => (
               <div key={incident.id} className="p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                  <h4 className="text-lg font-medium text-slate-900">{incident.title}</h4>
+                  <h4 className="text-lg font-medium text-brand-base">{incident.title}</h4>
                   <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold uppercase border
                     ${incident.status === 'RESOLVED' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 
                       incident.status === 'INVESTIGATING' ? 'bg-red-500/10 text-red-500 border-red-500/20' : 
@@ -216,7 +216,7 @@ export default function PublicStatus() {
                   </span>
                 </div>
                 <p className="text-sm text-slate-500 mb-1">
-                  Affecting: <span className="font-medium text-slate-900">{incident.monitor?.name || 'Multiple Services'}</span>
+                  Affecting: <span className="font-medium text-brand-base">{incident.monitor?.name || 'Multiple Services'}</span>
                 </p>
                 <time className="text-xs text-slate-400">
                   {new Date(incident.startedAt).toLocaleString()}

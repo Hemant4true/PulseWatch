@@ -2,13 +2,13 @@ import { Outlet } from 'react-router-dom';
 
 export function PublicLayout() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-white text-brand-base flex flex-col font-sans">
       <header className="h-16 flex items-center justify-between px-6 lg:px-12 shrink-0 bg-white border-b border-slate-200">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 flex items-center justify-center shrink-0">
             <img src="/logo.svg" alt="PulseWatch Logo" className="w-8 h-auto" />
           </div>
-          <span className="font-semibold text-lg tracking-tight text-slate-900">PulseWatch</span>
+          <span className="font-semibold text-lg tracking-tight text-brand-base">PulseWatch</span>
         </div>
       </header>
 

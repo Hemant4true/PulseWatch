@@ -23,8 +23,10 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brand: {
-          blue: "#2D3383",
-          white: "#FEFFFF",
+          base: '#1F2544',
+          surface: '#474F7A',
+          accent: '#81689D',
+          highlight: '#FFD0EC',
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
